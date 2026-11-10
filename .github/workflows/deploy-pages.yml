@@ -8,7 +8,6 @@ on:
       - 'styles.css'
       - 'script.js'
       - 'logo/elrico-final.svg'
-      - 'logo/elrico-final.png'
       - '.github/workflows/deploy-pages.yml'
   workflow_dispatch:
 
