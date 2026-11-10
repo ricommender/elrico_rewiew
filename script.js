@@ -94,11 +94,11 @@
       const box = visual.getBoundingClientRect();
       const x = (event.clientX-box.left)/box.width-.5;
       const y = (event.clientY-box.top)/box.height-.5;
-      visual.style.setProperty('--grid-x', (x * 8).toFixed(1) + 'px');
-      visual.style.setProperty('--grid-y', (y * 8).toFixed(1) + 'px');
+      visual.closest('.hero').style.setProperty('--grid-x', (x * 8).toFixed(1) + 'px');
+      visual.closest('.hero').style.setProperty('--grid-y', (y * 8).toFixed(1) + 'px');
       stage.style.transform = 'rotate(-5deg) rotateY('+ (x*10).toFixed(2)+'deg) rotateX('+(-y*9).toFixed(2)+'deg) translateY('+(-y*8).toFixed(1)+'px)';
     });
-    visual.addEventListener('pointerleave', () => {stage.style.transform = 'rotate(-5deg)';visual.style.removeProperty('--grid-x');visual.style.removeProperty('--grid-y');});
+    visual.addEventListener('pointerleave', () => {stage.style.transform = 'rotate(-5deg)';visual.closest('.hero').style.removeProperty('--grid-x');visual.closest('.hero').style.removeProperty('--grid-y');});
   }
 
   const reveals = document.querySelectorAll('.reveal');
