@@ -11,24 +11,34 @@
   <meta property="og:description" content="Ideen, die Code werden. Kreative KI-Anwendungen und digitale Experimente.">
   <title>elrico.de — Creative AI & Code</title>
   <link rel="icon" href="./logo/elrico-final.svg" type="image/svg+xml">
-  <link rel="preload" href="./logo/elrico-final.svg" as="image" type="image/svg+xml">
+  <link rel="preload" href="./assets/elrico-metallic.png" as="image" type="image/png">
   <link rel="stylesheet" href="./styles.css">
   <script defer src="./script.js"></script>
 </head>
 <body>
   <div class="intro" id="intro" aria-label="Animiertes Logo-Intro">
     <div class="intro-grain" aria-hidden="true"></div>
+    <div class="intro-cosmos" aria-hidden="true">
+      <div class="intro-orb"></div><div class="intro-orb-glow"></div>
+      <div class="intro-orb-ring intro-orb-ring--a"></div><div class="intro-orb-ring intro-orb-ring--b"></div>
+      <div class="intro-orb-sweep"></div>
+    </div>
+    <div class="intro-film" aria-hidden="true">
+      <video id="intro-video" muted playsinline preload="auto" disablepictureinpicture controlslist="nodownload noplaybackrate">
+        <source src="./assets/elrico-orb-intro.mp4" type="video/mp4">
+      </video>
+    </div>
     <div class="intro-copy intro-copy--top"><span>ELRICO<span class="red">.DE</span></span><span>CREATIVE AI / CODE</span></div>
     <div class="intro-gridlines" aria-hidden="true"></div>
     <div class="intro-slice intro-slice--one" aria-hidden="true"></div><div class="intro-slice intro-slice--two" aria-hidden="true"></div>
     <div class="intro-center">
       <p class="intro-kicker" id="intro-kicker">ELRICO / CREATIVE SYSTEMS / 01</p>
       <div class="intro-scan" aria-hidden="true"></div>
-      <div class="intro-logo-frame"><img src="./logo/elrico-final.svg" alt="elrico.de Logo Version 1.0" width="1254" height="1254"></div>
+      <div class="intro-logo-frame"><img src="./assets/elrico-metallic.png" alt="elrico.de Metallic-Logo" width="1254" height="1254"></div>
       <p class="intro-subtitle">IDEEN, DIE <em>CODE</em> WERDEN.</p>
       <p class="intro-beats"><span>01 / IDEE</span><span>02 / KI</span><span>03 / CODE</span></p>
     </div>
-    <div class="intro-copy intro-copy--bottom"><span>INITIALIZING CREATIVE SYSTEM</span><span class="intro-progress"><span id="intro-count">00</span><span class="red"> / 100</span></span></div>
+    <div class="intro-copy intro-copy--bottom"><span>ENGAGING METALLIC CORE</span><span class="intro-progress"><span id="intro-count">00</span><span class="red"> / 100</span></span></div>
     <div class="intro-progress-line" aria-hidden="true"><span></span></div>
     <button class="skip-intro" id="skip-intro" type="button">Intro überspringen <span aria-hidden="true">↗</span></button>
   </div>
@@ -56,7 +66,7 @@
           <div class="hero-visual" id="hero-visual">
             <div class="visual-ring ring-one" aria-hidden="true"></div><div class="visual-ring ring-two" aria-hidden="true"></div>
             <div class="hero-halo" aria-hidden="true"></div>
-            <div class="logo-stage" id="logo-stage"><div class="logo-stage-top"><span>ELRICO / VISUAL IDENTITY</span><span>FINAL 1.0</span></div><img src="./logo/elrico-final.svg" alt="Finales elrico.de Logo: Punk-Kopf mit roter Irospitze, Sonnenbrille und schwarz-roter Schrift" width="1254" height="1254"><div class="logo-stage-bottom"><span>ORIGINAL BRANDMARK</span><span class="stage-cross">✳</span></div></div>
+            <div class="hero-metal-orb" aria-hidden="true"><span></span></div><div class="logo-stage logo-stage--metal" id="logo-stage"><img src="./assets/elrico-metallic.png" alt="Metallisches elrico.de Logo vor einem roten Orb" width="1254" height="1254"><span class="metal-glint" aria-hidden="true"></span></div>
             <span class="visual-coordinate coordinate-a">X — 01 / Y — 01</span><span class="visual-coordinate coordinate-b">CREATIVE // UNLIMITED</span>
           </div>
         </div>
@@ -85,7 +95,7 @@
 
       <section class="contact section-pad" id="kontakt" aria-labelledby="contact-heading"><div class="contact-red-glow" aria-hidden="true"></div><div class="section-top reveal"><span class="section-number">03 / NÄCHSTER SCHRITT</span><span class="section-rule"></span><span>LET'S CREATE</span></div><div class="contact-layout"><div class="reveal"><p class="section-kicker">DIE NÄCHSTE IDEE?</p><h2 id="contact-heading">DEINE<span>.</span></h2><p>Skizziere deine Idee. Du bekommst ein kurzes Briefing, das du kopieren und für den nächsten Schritt verwenden kannst.</p></div><form class="brief-form reveal" id="brief-form"><label for="brief-idea">WAS HAST DU VOR?</label><textarea id="brief-idea" name="idea" rows="4" placeholder="Ein paar Sätze reichen ..." required maxlength="1400"></textarea><label for="brief-type">WELCHE RICHTUNG?</label><select name="type" id="brief-type"><option>KI-Anwendung</option><option>Automatisierung</option><option>Kreatives Experiment</option><option>Noch offen</option></select><button class="btn btn-red" type="submit">Briefing kopieren <span aria-hidden="true">↗</span></button><p class="form-feedback" id="form-feedback" role="status" aria-live="polite">Keine Übertragung: Deine Eingabe bleibt in deinem Browser.</p></form></div></section>
     </main>
-    <footer class="footer"><div class="footer-left"><a class="footer-brand" href="#start">elrico<span>.de</span></a><p>CREATIVE AI. CREATIVE CODE.<br>ONE MINDSET.</p></div><div class="footer-right"><span>LOGO / FINAL VERSION 1.0</span><span>WEBSITE / PREVIEW 1.1</span><a href="#start">BACK TO TOP ↑</a></div><div class="footer-note">Konzeptstand – vor öffentlicher Veröffentlichung Kontaktangaben, Impressum und Datenschutz vervollständigen.</div></footer>
+    <footer class="footer"><div class="footer-left"><a class="footer-brand" href="#start">elrico<span>.de</span></a><p>CREATIVE AI. CREATIVE CODE.<br>ONE MINDSET.</p></div><div class="footer-right"><span>LOGO / FINAL VERSION 1.0</span><span>WEBSITE / CINEMATIC PREVIEW 1.2</span><a href="#start">BACK TO TOP ↑</a></div><div class="footer-note">Konzeptstand – vor öffentlicher Veröffentlichung Kontaktangaben, Impressum und Datenschutz vervollständigen.</div></footer>
   </div>
 </body>
 </html>
