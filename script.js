@@ -7,6 +7,7 @@
   const skip = document.getElementById('skip-intro');
   const replay = document.getElementById('replay-intro');
   const count = document.getElementById('intro-count');
+  const introVideo = document.getElementById('intro-video');
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   let closed = false;
   let returnFocus = false;
@@ -18,6 +19,7 @@
     closed = true;
     cancelAnimationFrame(counterFrame);
     clearTimeout(introTimer);
+    if (introVideo) introVideo.pause();
     intro.classList.add('done');
     intro.setAttribute('aria-hidden', 'true');
     intro.setAttribute('inert', '');
@@ -42,7 +44,15 @@
     intro.removeAttribute('inert');
     intro.setAttribute('aria-hidden', 'false');
     intro.classList.remove('done', 'run');
-    // Restart CSS animation without changing the logo artwork.
+    // Start the actual cinematic film where supported; keep CSS/PNG as a safe fallback.
+    if (introVideo) {
+      try { introVideo.currentTime = 0; } catch (_) {}
+      const playAttempt = introVideo.play();
+      if (playAttempt && typeof playAttempt.catch === 'function') {
+        playAttempt.catch(() => intro.classList.remove('has-film'));
+      }
+    }
+    // Restart CSS animation without altering the approved artwork.
     void intro.offsetWidth;
     intro.classList.add('run');
     site.classList.remove('ready');
@@ -53,14 +63,18 @@
     const startTime = performance.now();
     function updateCounter(now) {
       if (closed) return;
-      const progress = Math.min(100, Math.round((now - startTime) / 29));
+      const progress = Math.min(100, Math.round((now - startTime) / 58));
       count.textContent = String(progress).padStart(2,'0');
       if (progress < 100) counterFrame = requestAnimationFrame(updateCounter);
     }
     counterFrame = requestAnimationFrame(updateCounter);
-    introTimer = setTimeout(finishIntro, 3150);
+    introTimer = setTimeout(finishIntro, 5800);
   }
 
+  if (introVideo) {
+    introVideo.addEventListener('playing', () => intro.classList.add('has-film'));
+    introVideo.addEventListener('error', () => intro.classList.remove('has-film'));
+  }
   skip.addEventListener('click', finishIntro);
   document.addEventListener('keydown', event => {
     if (event.key === 'Escape' && !closed) finishIntro();
