@@ -96,3 +96,72 @@ body.intro-active .site{opacity:0}
   from{transform:translateY(35px) scaleX(.9);opacity:0}
   to{transform:translateY(0) scaleX(.9);opacity:1}
 }
+
+
+/* Preview 1.2 — metal-logo cinema, live orb, zero white backgrounds */
+.intro{background:#020204;transition:opacity .82s ease,visibility .82s ease}
+.intro-grain{z-index:3;opacity:.055;pointer-events:none}
+.intro-cosmos{position:absolute;inset:0;z-index:0;display:grid;place-items:center;overflow:hidden;transition:opacity .45s;isolation:isolate}
+.intro-cosmos:before{content:"";position:absolute;width:110vmax;height:110vmax;border-radius:50%;background:radial-gradient(circle,#cf00174a 0,transparent 42%);opacity:.42;filter:blur(30px);animation:cinemaAtmosphere 7s ease-in-out infinite}
+.intro-orb{position:absolute;width:min(67vmin,620px);aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 38% 32%,#a22a3b 0%,#61091b 19%,#230711 48%,#09040b 67%,#020204 72%);box-shadow:inset 8px 0 50px #e4204788,inset -26px -35px 80px #000c,0 0 38px #ed12334a,0 0 140px #e6002b45;filter:saturate(1.45);animation:cinemaOrbPulse 2.15s ease-in-out infinite}
+.intro-orb:before{content:"";position:absolute;inset:-3%;border-radius:50%;border:2px solid #ff234d80;box-shadow:0 0 35px #ff174d,0 0 95px #a8002f66,inset 0 0 40px #ff1a4f55;opacity:.6;animation:cinemaOrbCharge 2.15s ease-in-out infinite}
+.intro-orb:after{content:"";position:absolute;inset:10%;border-radius:50%;opacity:.5;background:conic-gradient(from 20deg,transparent 5%,#ff1e3a27 18%,transparent 32%,#ff456a19 51%,transparent 65%,#ec294b26 79%,transparent);filter:blur(17px);animation:spin 18s linear infinite}
+.intro-orb-glow{position:absolute;width:70vmin;height:70vmin;border-radius:50%;box-shadow:0 0 140px 60px #ad132c36;animation:cinemaOrbPulse 2.15s ease-in-out infinite}
+.intro-orb-ring{position:absolute;aspect-ratio:1;border:1px solid rgba(242,44,75,.4);border-radius:50%;transform:rotateX(68deg);box-shadow:0 0 22px #de143344}
+.intro-orb-ring--a{width:min(90vmin,840px);animation:cinemaOrbit 12s linear infinite}
+.intro-orb-ring--b{width:min(99vmin,940px);border-style:dashed;opacity:.45;animation:cinemaOrbit 20s linear infinite reverse}
+.intro-orb-sweep{position:absolute;height:2px;width:150vw;left:-25vw;top:48%;transform:rotate(-22deg);background:linear-gradient(90deg,transparent,#ff003c48,#ff6a81,transparent);box-shadow:0 0 28px #ff214b;opacity:.55;animation:cinemaRay 3.3s ease-in-out infinite}
+.intro-film{position:absolute;inset:0;z-index:1;display:grid;place-items:center;opacity:0;transition:opacity .6s ease;pointer-events:none}
+.intro-film video{width:100%;height:100%;display:block;object-fit:contain;filter:contrast(1.12) saturate(1.25)}
+.intro.has-film .intro-film{opacity:1}
+.intro.has-film .intro-cosmos{opacity:0}
+.intro-center{z-index:2;max-width:100vw}
+.intro-logo-frame{background:transparent!important;box-shadow:none!important;width:min(67vmin,650px)!important;min-width:0!important;aspect-ratio:1;clip-path:none!important;perspective:1200px}
+.intro-logo-frame img{filter:drop-shadow(0 0 44px #ff1c3944);object-fit:contain}
+.intro.run .intro-logo-frame{animation:cinemaLogoSwing 5.4s ease-in-out both!important}
+.intro.has-film .intro-logo-frame{visibility:hidden}
+.intro-scan{display:none}
+.intro-subtitle{font-size:clamp(12px,1.2vw,19px);text-shadow:0 2px 16px #000}
+.intro-kicker{font-size:clamp(8px,.9vw,12px);text-shadow:0 2px 15px #000}
+.intro-beats{max-width:420px}
+.intro-beats span{background:#04040688;text-shadow:0 2px 12px #000}
+.intro-copy{z-index:4;text-shadow:0 2px 12px #000}
+.intro-slice{z-index:3}
+.skip-intro{z-index:5}
+.intro-progress-line{z-index:5}
+.intro-progress-line span,.intro.run .intro-progress-line span{animation:load 5.8s linear both}
+.intro.run .intro-logo-frame img{animation:cinemaMetalGlint 2.8s ease-in-out 1s 2}
+@keyframes cinemaOrbPulse{0%,100%{transform:scale(.92);filter:brightness(.8)}42%{transform:scale(1.07);filter:brightness(1.65)}68%{transform:scale(.97);filter:brightness(1.2)}}
+@keyframes cinemaOrbCharge{0%,100%{opacity:.22}48%{opacity:1}70%{opacity:.42}}
+@keyframes cinemaOrbit{from{transform:rotateX(68deg) rotateZ(0)}to{transform:rotateX(68deg) rotateZ(360deg)}}
+@keyframes cinemaAtmosphere{0%,100%{transform:scale(.85);opacity:.32}50%{transform:scale(1.15);opacity:.6}}
+@keyframes cinemaRay{0%,100%{opacity:.14;top:35%}50%{opacity:.7;top:70%}}
+@keyframes cinemaMetalGlint{0%,100%{filter:drop-shadow(0 0 25px #ff1c3929) brightness(.9)}40%{filter:drop-shadow(0 0 60px #ff1c3973) brightness(1.35)}}
+@keyframes cinemaLogoSwing{0%{transform:perspective(900px) rotateY(-70deg) scale(.65);opacity:0}16%{opacity:1}44%{transform:perspective(900px) rotateY(22deg) scale(.97)}67%{transform:perspective(900px) rotateY(-13deg) scale(1)}85%,100%{transform:perspective(900px) rotateY(0deg) scale(1);opacity:1}}
+
+/* Metallic emblem integrated into the hero; no white tile or card. */
+.hero{background:radial-gradient(ellipse at 78% 42%,#2b0d18,#141016 38%,#0a0a0d 79%)}
+.hero-right{isolation:isolate}
+.hero-visual{position:relative}
+.hero-metal-orb{position:absolute;z-index:0;top:50%;left:50%;width:min(80%,600px);aspect-ratio:1;border-radius:50%;transform:translate(-50%,-50%);background:radial-gradient(circle at 34% 27%,#872437 0,#510f23 24%,#210915 49%,#0b0710 68%,#020204 72%);box-shadow:0 0 80px 15px #ef192d49,inset 0 0 40px #f21f4955,inset -50px -25px 100px #000d;animation:heroOrbPulse 4.4s ease-in-out infinite}
+.hero-metal-orb:after{content:"";position:absolute;inset:-2%;border:2px solid #ff2f5966;border-radius:50%;box-shadow:0 0 27px #e9114599,inset 0 0 20px #fc285b55;animation:cinemaOrbCharge 4.4s ease-in-out infinite}
+.logo-stage--metal{position:relative;z-index:2;width:min(94%,670px)!important;max-width:100%;padding:0!important;border:0!important;background:transparent!important;box-shadow:none!important;transform:rotate(-5deg);filter:drop-shadow(0 18px 28px #000b) drop-shadow(0 0 45px #fb204034)}
+.logo-stage--metal img{display:block;width:100%;height:auto;object-fit:contain}
+.logo-stage--metal:after{inset:12%;border-radius:50%}
+.logo-stage--metal .metal-glint{position:absolute;inset:0;pointer-events:none;mix-blend-mode:screen;background:linear-gradient(112deg,transparent 32%,#ffffff19 49%,transparent 60%);mask-image:url("./assets/elrico-metallic.png");mask-size:contain;mask-repeat:no-repeat;mask-position:center;animation:cinemaGlintMove 7s ease-in-out infinite}
+.visual-ring{opacity:.4}
+@keyframes heroOrbPulse{0%,100%{transform:translate(-50%,-50%) scale(.94);filter:brightness(.85)}50%{transform:translate(-50%,-50%) scale(1.075);filter:brightness(1.42)}}
+@keyframes cinemaGlintMove{0%,100%{background-position:-550px 0}50%{background-position:550px 0}}
+@media (max-width:760px){
+  .intro-logo-frame{width:min(88vw,470px)!important}
+  .intro-beats{width:min(86vw,365px)}
+  .intro-film video{object-fit:contain}
+  .intro-orb{width:77vmin}
+  .logo-stage--metal{width:min(100%,490px)!important}
+  .hero-metal-orb{width:min(84%,440px)}
+}
+@media (prefers-reduced-motion:reduce){
+  .intro{display:none!important}
+  .site{opacity:1!important}
+  .hero-metal-orb,.hero-metal-orb:after,.logo-stage--metal .metal-glint{animation:none!important}
+}
