@@ -89,3 +89,10 @@ body.intro-active .site{opacity:0}
   .site,body.intro-active .site{opacity:1}
   .site.ready .hero-left .eyebrow,.site.ready .hero h1,.site.ready .hero-lead,.site.ready .hero-actions,.site.ready .hero-right{animation:none}
 }
+
+/* Keep original headline width during animated entrance. */
+.site.ready .hero h1{animation-name:heroEnterScaled}
+@keyframes heroEnterScaled{
+  from{transform:translateY(35px) scaleX(.9);opacity:0}
+  to{transform:translateY(0) scaleX(.9);opacity:1}
+}
