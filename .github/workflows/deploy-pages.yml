@@ -8,6 +8,8 @@ on:
       - 'styles.css'
       - 'script.js'
       - 'logo/elrico-final.svg'
+      - 'assets/elrico-metallic.png'
+      - 'assets/elrico-orb-intro.mp4'
       - '.github/workflows/deploy-pages.yml'
   workflow_dispatch:
 
@@ -29,9 +31,10 @@ jobs:
       - name: Prepare static preview (only public website files)
         run: |
           set -eu
-          mkdir -p _site/logo
+          mkdir -p _site/logo _site/assets
           cp index.html styles.css script.js _site/
           cp logo/elrico-final.svg _site/logo/
+          cp assets/elrico-metallic.png assets/elrico-orb-intro.mp4 _site/assets/
           touch _site/.nojekyll
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5
