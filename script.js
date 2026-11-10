@@ -1,87 +1,175 @@
 (() => {
   'use strict';
 
-  // Website preview 1.1: re-playable intro, unchanged original logo.
+  // Cinematic preview v1.3: honest, non-blocking video readiness.
+  // The original final logo and the Magnific film are never regenerated.
   const intro = document.getElementById('intro');
   const site = document.getElementById('site');
   const skip = document.getElementById('skip-intro');
   const replay = document.getElementById('replay-intro');
-  const count = document.getElementById('intro-count');
-  const introVideo = document.getElementById('intro-video');
+  const video = document.getElementById('intro-video');
+  const status = document.getElementById('intro-status');
   const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  let closed = false;
-  let returnFocus = false;
-  let counterFrame = 0;
-  let introTimer = 0;
+
+  let closed = true;
+  let returningFocus = false;
+  let phase = 'idle';
+  let sequence = 0;
+  let pendingPlay = false;
+  let readyTimeout = 0;
+  let fallbackTimeout = 0;
+  let filmTimeout = 0;
+  let bufferingTimeout = 0;
+
+  function clearIntroTimers() {
+    clearTimeout(readyTimeout);
+    clearTimeout(fallbackTimeout);
+    clearTimeout(filmTimeout);
+    clearTimeout(bufferingTimeout);
+  }
+
+  function setIntroStatus(message) {
+    if (status && status.textContent !== message) status.textContent = message;
+  }
 
   function finishIntro() {
     if (closed) return;
     closed = true;
-    cancelAnimationFrame(counterFrame);
-    clearTimeout(introTimer);
-    if (introVideo) introVideo.pause();
+    sequence += 1;
+    clearIntroTimers();
+    if (video) video.pause();
     intro.classList.add('done');
+    intro.classList.remove('has-film', 'buffering');
     intro.setAttribute('aria-hidden', 'true');
     intro.setAttribute('inert', '');
     site.removeAttribute('inert');
     site.classList.add('ready');
     document.body.classList.remove('intro-active');
-    if (returnFocus) {
-      replay.focus({preventScroll:true});
-      returnFocus = false;
-    } else {
+    if (returningFocus) {
+      replay.focus({preventScroll: true});
+      returningFocus = false;
+    } else if (document.activeElement === skip) {
       skip.blur();
+    }
+  }
+
+  function playFallback() {
+    if (closed || phase !== 'loading') return;
+    phase = 'fallback';
+    pendingPlay = false;
+    clearTimeout(readyTimeout);
+    intro.classList.remove('has-film', 'buffering');
+    intro.classList.add('fallback');
+    setIntroStatus('ORB-ANIMATION');
+    // A slow or blocked video must never block access to the actual page.
+    fallbackTimeout = setTimeout(finishIntro, 1550);
+  }
+
+  function tryStartFilm() {
+    if (!video || closed || phase !== 'loading' || pendingPlay || video.readyState < 3) return;
+    pendingPlay = true;
+    const token = sequence;
+    try {
+      const promise = video.play();
+      Promise.resolve(promise).then(() => {
+        if (closed || sequence !== token || phase !== 'loading') {
+          video.pause();
+          return;
+        }
+        pendingPlay = false;
+        phase = 'film';
+        clearTimeout(readyTimeout);
+        intro.classList.remove('fallback', 'buffering');
+        intro.classList.add('has-film');
+        setIntroStatus('FILMSEQUENZ AKTIV');
+        // Includes a little margin over the real 5.04 second movie.
+        filmTimeout = setTimeout(finishIntro, 6000);
+      }).catch(() => {
+        if (!closed && sequence === token) playFallback();
+      });
+    } catch (_) {
+      playFallback();
     }
   }
 
   function startIntro(fromReplay = false) {
     if (reduced) return;
-    cancelAnimationFrame(counterFrame);
-    clearTimeout(introTimer);
+    sequence += 1;
+    clearIntroTimers();
+    if (video) {
+      video.pause();
+      try { video.currentTime = 0; } catch (_) {}
+    }
     closed = false;
-    returnFocus = fromReplay;
-    count.textContent = '00';
+    returningFocus = fromReplay;
+    pendingPlay = false;
+    phase = 'loading';
+
     intro.removeAttribute('inert');
     intro.setAttribute('aria-hidden', 'false');
-    intro.classList.remove('done', 'run');
-    // Start the actual cinematic film where supported; keep CSS/PNG as a safe fallback.
-    if (introVideo) {
-      try { introVideo.currentTime = 0; } catch (_) {}
-      const playAttempt = introVideo.play();
-      if (playAttempt && typeof playAttempt.catch === 'function') {
-        playAttempt.catch(() => intro.classList.remove('has-film'));
-      }
-    }
-    // Restart CSS animation without altering the approved artwork.
+    intro.classList.remove('done', 'run', 'fallback', 'buffering', 'has-film');
+    // Restarts the CSS orb/metal fallback without changing either image.
     void intro.offsetWidth;
     intro.classList.add('run');
     site.classList.remove('ready');
     site.setAttribute('inert', '');
     document.body.classList.add('intro-active');
-    if (fromReplay) skip.focus({preventScroll:true});
+    setIntroStatus('FILM WIRD GELADEN');
+    if (fromReplay) skip.focus({preventScroll: true});
 
-    const startTime = performance.now();
-    function updateCounter(now) {
-      if (closed) return;
-      const progress = Math.min(100, Math.round((now - startTime) / 58));
-      count.textContent = String(progress).padStart(2,'0');
-      if (progress < 100) counterFrame = requestAnimationFrame(updateCounter);
+    // Never force the visitor to wait for a large media download.
+    readyTimeout = setTimeout(playFallback, 1850);
+    if (video) {
+      if (video.readyState >= 3) tryStartFilm();
+      else video.load();
+    } else {
+      playFallback();
     }
-    counterFrame = requestAnimationFrame(updateCounter);
-    introTimer = setTimeout(finishIntro, 5800);
   }
 
-  if (introVideo) {
-    introVideo.addEventListener('playing', () => intro.classList.add('has-film'));
-    introVideo.addEventListener('error', () => intro.classList.remove('has-film'));
+  if (video) {
+    video.addEventListener('canplay', tryStartFilm);
+    video.addEventListener('loadeddata', tryStartFilm);
+    video.addEventListener('ended', () => {
+      if (!closed && phase === 'film') finishIntro();
+    });
+    video.addEventListener('error', () => {
+      if (!closed && phase === 'loading') playFallback();
+      else if (!closed && phase === 'film') finishIntro();
+    });
+    video.addEventListener('waiting', () => {
+      if (closed || phase !== 'film') return;
+      intro.classList.add('buffering');
+      setIntroStatus('ORB BLEIBT AKTIV');
+      clearTimeout(bufferingTimeout);
+      bufferingTimeout = setTimeout(finishIntro, 1500);
+    });
+    video.addEventListener('playing', () => {
+      if (closed || phase !== 'film') return;
+      clearTimeout(bufferingTimeout);
+      intro.classList.remove('buffering');
+      setIntroStatus('FILMSEQUENZ AKTIV');
+    });
   }
+
   skip.addEventListener('click', finishIntro);
   document.addEventListener('keydown', event => {
     if (event.key === 'Escape' && !closed) finishIntro();
   });
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden && !closed) finishIntro();
+  });
   replay.addEventListener('click', () => startIntro(true));
-  if (reduced) finishIntro();
-  else startIntro(false);
+  if (reduced) {
+    closed = false;
+    if (video) {
+      video.preload = 'none';
+      video.removeAttribute('src');
+    }
+    finishIntro();
+  } else {
+    startIntro(false);
+  }
 
   // Thin reading-progress line and nav contrast as the page scrolls.
   const progressFill = document.getElementById('page-progress-fill');
