@@ -27,3 +27,12 @@ Die Testseite ist öffentlich und mit `noindex` gekennzeichnet. Das private Entw
 - **Performance / Bedienung:** Film stumm, auf Mobilgeräten `playsinline`; bei reduzierter Bewegung wird das Intro übersprungen.
 
 Live-Test: https://ricommender.github.io/elrico_rewiew/
+
+## Cinematic Intro — Preview v1.3
+
+- Metalllogo und der ursprüngliche Magnific-Film bleiben unverändert gespeichert.
+- Komprimierte Webversion: [`assets/elrico-orb-intro-web.mp4`](assets/elrico-orb-intro-web.mp4) – **1,82 MiB** statt 9,71 MiB (1080 × 1080, H.264, ca. 5 Sekunden).
+- Sofort sichtbarer CSS-Orb mit Metalllogo während der Videovorbereitung, ohne künstlichen Prozent-Ladebalken.
+- Start des Films erst bei Ladebereitschaft; bei langsamer Verbindung oder gesperrtem Autoplay läuft eine kurze CSS-Fallback-Sequenz und die Webseite öffnet sich automatisch.
+- Intro kann jederzeit übersprungen und auf Wunsch erneut gestartet werden. Bei `prefers-reduced-motion` startet die Seite ohne Intro.
+- `logo/elrico-final.svg` bleibt der unveränderte Logo-Referenzstand v1.0.
