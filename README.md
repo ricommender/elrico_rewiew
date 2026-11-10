@@ -10,3 +10,10 @@
 4. Prüfe anschließend die Vorschau unter https://ricommender.github.io/elrico_rewiew/ .
 
 Die Testseite ist öffentlich und mit `noindex` gekennzeichnet. Das private Entwicklungsrepository bleibt getrennt.
+
+## Preview v1.1
+
+- Animiertes Logo-Intro mit rotem Cut/Scan, drei Phasen **IDEE → KI → CODE**, Skip und Replay.
+- Neue Einblendungen für Hero und Leistungsbereiche, Fortschrittsbalken und animierte Mikrointeraktionen.
+- Respektiert `prefers-reduced-motion` und lässt das Original-Logo FINAL v1.0 unverändert.
+- Die Vorschau nutzt nur statische Dateien und lädt keine externen Tracking-Skripte.
