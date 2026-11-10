@@ -165,3 +165,45 @@ body.intro-active .site{opacity:0}
   .site{opacity:1!important}
   .hero-metal-orb,.hero-metal-orb:after,.logo-stage--metal .metal-glint{animation:none!important}
 }
+
+
+/* Preview 1.3 — instant Orb preloader, truthful status, graceful media startup */
+.intro-status{
+  display:inline-flex;align-items:center;gap:10px;color:#e2c9cf;
+  font:800 10px/1.4 "Courier New",monospace;letter-spacing:.12em;
+  white-space:nowrap;
+}
+.intro-status:before{
+  content:"";width:10px;height:10px;flex:0 0 10px;
+  border:2px solid #f52b5099;border-right-color:transparent;
+  border-radius:50%;box-shadow:0 0 11px #f7284d7b;
+  animation:preloaderSpin .9s linear infinite;
+}
+.intro.has-film .intro-status:before{background:#f52b50;border-color:#f52b50;animation:preloaderLive 1.6s ease-in-out infinite}
+.intro.fallback .intro-status:before{background:#f52b50;border-color:#f52b50;animation:preloaderLive 1.6s ease-in-out infinite}
+.intro .intro-progress-line{
+  bottom:0;height:2px;overflow:hidden;background:#100609;
+  transition:opacity .22s ease;
+}
+.intro .intro-progress-line span,.intro.run .intro-progress-line span{
+  display:block;height:100%;width:28%!important;
+  background:linear-gradient(90deg,transparent,#ff2549 60%,#ff9baa);
+  box-shadow:0 0 18px #ff2348;
+  transform:translateX(-120%);
+  animation:preloaderSweep 1.4s ease-in-out infinite!important;
+}
+.intro.has-film .intro-progress-line,.intro.fallback .intro-progress-line{opacity:0}
+.intro.buffering .intro-cosmos{opacity:1!important}
+.intro.buffering .intro-film{opacity:.09!important}
+.intro.buffering .intro-logo-frame{visibility:visible!important}
+@keyframes preloaderSpin{to{transform:rotate(360deg)}}
+@keyframes preloaderLive{0%,100%{box-shadow:0 0 0 0 #f7284d7b}50%{box-shadow:0 0 0 5px #f7284d12}}
+@keyframes preloaderSweep{0%{transform:translateX(-120%)}100%{transform:translateX(460%)}}
+@media (max-width:460px){
+  .intro-status{font-size:8px;letter-spacing:.06em}
+  .intro-copy--bottom{bottom:31px}
+}
+@media (prefers-reduced-motion:reduce){
+  .intro-status:before,.intro .intro-progress-line span{animation:none!important}
+  .btn-replay{display:none!important}
+}
