@@ -1,0 +1,38 @@
+name: Import cinematic ELRICO media
+on:
+  push:
+    paths:
+      - '.github/workflows/import-cinema-assets.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  import-media:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download approved metallic logo and Magnific film
+        env:
+          IMAGE_URL: 'https://pikaso.cdnpk.net/private/production/5999997117/3851759358.png?token=exp=1794700800~hmac=1a4be5295f9dc8e019dbdb8a78c456d2b0700b7e7731c0ed4fde0a219021da88'
+          VIDEO_URL: 'https://pikaso.cdnpk.net/private/production/6000047192/b5afc463-ae76-4066-9b9c-66fdbaf63d4a-0.mp4?token=exp=1794700800~hmac=8e62b8888b02948848602a51d83d0149ffb5448d035ae65dca75ef0b568f42cb'
+        run: |
+          set -euo pipefail
+          mkdir -p assets
+          curl --fail --silent --show-error --location --retry 3 "$IMAGE_URL" --output assets/elrico-metallic.png
+          echo '021d11a5a3efa13a551a223ec209b2b1333ac852948a60a063ba5f689073f781  assets/elrico-metallic.png' | sha256sum -c -
+          curl --fail --silent --show-error --location --retry 3 "$VIDEO_URL" --output /tmp/elrico-orb-master.mp4
+          ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1 /tmp/elrico-orb-master.mp4
+      - name: Encode optimized MP4 for the web
+        run: |
+          set -euo pipefail
+          ffmpeg -hide_banner -loglevel error -y -i /tmp/elrico-orb-master.mp4 -vf "scale=1080:1080:flags=lanczos" -c:v libx264 -preset medium -crf 21 -pix_fmt yuv420p -movflags +faststart -an assets/elrico-orb-intro.mp4
+          test $(stat -c%s assets/elrico-orb-intro.mp4) -gt 100000
+          file assets/elrico-orb-intro.mp4 assets/elrico-metallic.png
+          du -h assets/*
+      - name: Commit cinematic media
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/elrico-metallic.png assets/elrico-orb-intro.mp4
+          git diff --cached --quiet || git commit -m "Add optimized metallic emblem and Magnific cinematic orb intro"
+          git push
