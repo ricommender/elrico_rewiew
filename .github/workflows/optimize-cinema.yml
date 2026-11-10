@@ -1,0 +1,34 @@
+name: Optimize ELRICO intro for web
+on:
+  push:
+    paths:
+      - '.github/workflows/optimize-cinema.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  encode:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install FFmpeg
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq ffmpeg
+      - name: Create web-optimized MP4
+        run: |
+          set -euo pipefail
+          ffmpeg -hide_banner -loglevel error -nostdin -y -i assets/elrico-orb-intro.mp4 -vf "scale=1080:1080:flags=lanczos" -c:v libx264 -preset medium -crf 23 -pix_fmt yuv420p -movflags +faststart -an assets/elrico-orb-intro-web.mp4
+          if [ "$(stat -c%s assets/elrico-orb-intro-web.mp4)" -gt 4194304 ]; then
+            ffmpeg -hide_banner -loglevel error -nostdin -y -i assets/elrico-orb-intro.mp4 -vf "scale=1080:1080:flags=lanczos" -c:v libx264 -preset medium -crf 26 -pix_fmt yuv420p -movflags +faststart -an assets/elrico-orb-intro-web.mp4
+          fi
+          test "$(stat -c%s assets/elrico-orb-intro-web.mp4)" -gt 100000
+          ffprobe -v error -show_entries format=duration,size -of default=noprint_wrappers=1 assets/elrico-orb-intro-web.mp4
+          sha256sum assets/elrico-orb-intro-web.mp4
+      - name: Commit optimized video
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add assets/elrico-orb-intro-web.mp4
+          git diff --cached --quiet || git commit -m "Add optimized ELRICO cinematic intro for web"
+          git push
