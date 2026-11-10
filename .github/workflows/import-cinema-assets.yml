@@ -21,13 +21,10 @@ jobs:
           curl --fail --silent --show-error --location --retry 3 "$IMAGE_URL" --output assets/elrico-metallic.png
           echo '021d11a5a3efa13a551a223ec209b2b1333ac852948a60a063ba5f689073f781  assets/elrico-metallic.png' | sha256sum -c -
           curl --fail --silent --show-error --location --retry 3 "$VIDEO_URL" --output /tmp/elrico-orb-master.mp4
-          ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1 /tmp/elrico-orb-master.mp4
-      - name: Encode optimized MP4 for the web
+          test $(stat -c%s /tmp/elrico-orb-master.mp4) -gt 100000
+      - name: Save original Magnific MP4
         run: |
-          set -euo pipefail
-          ffmpeg -hide_banner -loglevel error -y -i /tmp/elrico-orb-master.mp4 -vf "scale=1080:1080:flags=lanczos" -c:v libx264 -preset medium -crf 21 -pix_fmt yuv420p -movflags +faststart -an assets/elrico-orb-intro.mp4
-          test $(stat -c%s assets/elrico-orb-intro.mp4) -gt 100000
-          file assets/elrico-orb-intro.mp4 assets/elrico-metallic.png
+          mv /tmp/elrico-orb-master.mp4 assets/elrico-orb-intro.mp4
           du -h assets/*
       - name: Commit cinematic media
         run: |
